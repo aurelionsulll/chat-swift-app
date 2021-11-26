@@ -11,11 +11,13 @@ import Firebase
 
 class FirebaseManager: NSObject {
     let auth: Auth
+    let storage: Storage
     static let shared = FirebaseManager()
     
     override init() {
         FirebaseApp.configure()
         self.auth = Auth.auth()
+        self.storage = Storage.storage()
         super.init()
     }
 }
@@ -119,6 +121,28 @@ struct LoginView: View {
             }
             self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
             
+            uploadImage()
+            
+        }
+    }
+    
+    private func uploadImage() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {return}
+        let ref = FirebaseManager.shared.storage.reference(withPath: uid)
+        guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else {return}
+        ref.putData(imageData, metadata: nil) { metaData, error in
+            if let error = error {
+                self.loginStatusMessage = "Failed to push image: \(error)"
+                return
+            }
+            ref.downloadURL { url, error in
+                if let error = error {
+                    self.loginStatusMessage = "Failed to get image url: \(error)"
+                    return
+                }
+                self.loginStatusMessage = "Successfullu strored image"
+                print(url?.absoluteString ?? "")
+            }
         }
     }
     
