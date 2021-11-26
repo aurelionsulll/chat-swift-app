@@ -12,12 +12,14 @@ import Firebase
 class FirebaseManager: NSObject {
     let auth: Auth
     let storage: Storage
+    let firestore: Firestore
     static let shared = FirebaseManager()
     
     override init() {
         FirebaseApp.configure()
         self.auth = Auth.auth()
         self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
         super.init()
     }
 }
@@ -126,6 +128,16 @@ struct LoginView: View {
         }
     }
     
+    private func loginUser() {
+        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
+            if let err = error {
+                self.loginStatusMessage = "Failed to login user: \(err)"
+                return
+            }
+            self.loginStatusMessage = "Successfully logged in \(result?.user.uid ?? "")"
+        }
+    }
+
     private func uploadImage() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {return}
         let ref = FirebaseManager.shared.storage.reference(withPath: uid)
@@ -141,19 +153,25 @@ struct LoginView: View {
                     return
                 }
                 self.loginStatusMessage = "Successfullu strored image"
-                print(url?.absoluteString ?? "")
+                guard let url = url else { return}
+                self.storeUserInformation(imageProfileUrl: url)
             }
         }
     }
     
-    private func loginUser() {
-        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
-            if let err = error {
-                self.loginStatusMessage = "Failed to login user: \(err)"
-                return
+    private func storeUserInformation(imageProfileUrl: URL) {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let userData = ["email": self.email, "uid": uid, "profileImageUrl": imageProfileUrl.absoluteString]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userData) { err in
+                if let err = err {
+                    print(err)
+                    self.loginStatusMessage = "\(err)"
+                    return
+                }
+                
+                print("Success")
             }
-            self.loginStatusMessage = "Successfully logged in \(result?.user.uid ?? "")"
-        }
     }
 }
 
