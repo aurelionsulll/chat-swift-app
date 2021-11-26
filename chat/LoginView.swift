@@ -25,8 +25,10 @@ struct LoginView: View {
     @State var email = ""
     @State var password = ""
     @State var loginStatusMessage = ""
+    @State var shwoImagePicker = false
+    @State var image: UIImage?
     
-
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -42,10 +44,24 @@ struct LoginView: View {
                     
                     if !isLoginMode {
                         Button {
-                            
+                            shwoImagePicker.toggle()
                         } label: {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 64))
+                            
+                            VStack {
+                                if let image = self.image {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .frame(width: 128, height: 128)
+                                        .scaledToFill()
+                                        .cornerRadius(64)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .font(.system(size: 64))
+                                        .padding()
+                                        .foregroundColor(Color(.label))
+                                }
+                            }
+                            .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black,lineWidth: 2))
                         }
                     }
                     
@@ -82,6 +98,9 @@ struct LoginView: View {
             .background(Color(.init(white:0, alpha:0.05)).ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $shwoImagePicker, onDismiss: nil) {
+            ImagePicker(image: $image)
+        }
     }
     
     private func handleAction() {
@@ -91,7 +110,7 @@ struct LoginView: View {
             createNewAccount()
         }
     }
-        
+    
     private func createNewAccount() {
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { result, error in
             if let err = error {
@@ -99,7 +118,7 @@ struct LoginView: View {
                 return
             }
             self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
-
+            
         }
     }
     

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		452F33FE27506C4B00CB675C /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452F33FD27506C4B00CB675C /* ImagePicker.swift */; };
 		45A02954274FC8930077C222 /* chatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A02953274FC8930077C222 /* chatApp.swift */; };
 		45A02956274FC8930077C222 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A02955274FC8930077C222 /* LoginView.swift */; };
 		45A02958274FC8990077C222 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45A02957274FC8990077C222 /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		452F33FD27506C4B00CB675C /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		45A02950274FC8930077C222 /* chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45A02953274FC8930077C222 /* chatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatApp.swift; sourceTree = "<group>"; };
 		45A02955274FC8930077C222 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				45A02957274FC8990077C222 /* Assets.xcassets */,
 				45A02966274FD78A0077C222 /* GoogleService-Info.plist */,
 				45A02959274FC8990077C222 /* Preview Content */,
+				452F33FD27506C4B00CB675C /* ImagePicker.swift */,
 			);
 			path = chat;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				452F33FE27506C4B00CB675C /* ImagePicker.swift in Sources */,
 				45A02956274FC8930077C222 /* LoginView.swift in Sources */,
 				45A02954274FC8930077C222 /* chatApp.swift in Sources */,
 			);
